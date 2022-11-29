@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState, useEffect } from "react";
+// const API = "http://localhost:4000";
+const API = "https://jeevr-node.herokuapp.com";
 
 function App() {
+  const [mobiles, setMobiles] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API}/mobiles`)
+      .then((data) => data.json())
+      .then((mbs) => setMobiles(mbs));
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="mobile-list-container">
+        {mobiles.map((mb) => (
+          <Phone key={mb._id} mobile={mb} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Phone({ mobile }) {
+  return (
+    <div className="mobile-container">
+      <img src={mobile.img} alt={mobile.model} className="mobile-pic" />
+      <h2 className="mobile-model">{mobile.model}</h2>
+      <p className="mobile-company">{mobile.company}</p>
     </div>
   );
 }
